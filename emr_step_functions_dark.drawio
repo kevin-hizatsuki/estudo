@@ -1,0 +1,356 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net">
+  <diagram name="EMR Step Functions" id="emr-sf-2">
+    <mxGraphModel dx="1400" dy="900" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#12151c;strokeColor=none;movable=0;editable=0;locked=1;" vertex="1" parent="1">
+          <mxGeometry x="-60" y="-40" width="2300" height="2500" as="geometry" />
+        </mxCell>
+        <mxCell id="start" value="Start" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f2d98a;strokeColor=none;fontColor=#12151c;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="20" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="modelo" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Pass state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Modelo de Input da Step Functions&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="250" y="100" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="modelo_icon" value="" style="html=1;fillColor=#4a90e2;strokeColor=none;rounded=1;arcSize=100;" vertex="1" parent="1">
+          <mxGeometry x="260" y="117.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="paramdefault" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Pass state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Parâmetros Default&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="250" y="180" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="paramdefault_icon" value="" style="html=1;fillColor=#4a90e2;strokeColor=none;rounded=1;arcSize=100;" vertex="1" parent="1">
+          <mxGeometry x="260" y="197.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="unir" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Pass state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Unir Parâmetros do Input e Default&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="250" y="260" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="unir_icon" value="" style="html=1;fillColor=#4a90e2;strokeColor=none;rounded=1;arcSize=100;" vertex="1" parent="1">
+          <mxGeometry x="260" y="277.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="consultasteps" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Pass state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Consulta número de Steps&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="250" y="340" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="consultasteps_icon" value="" style="html=1;fillColor=#4a90e2;strokeColor=none;rounded=1;arcSize=100;" vertex="1" parent="1">
+          <mxGeometry x="260" y="357.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="criarcluster_q" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Choice state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Criar Cluster?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="250" y="420" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="criarcluster_q_icon" value="" style="html=1;fillColor=#9b7fe8;strokeColor=none;shape=mxgraph.basic.diamondThin;perimeter=rhombusPerimeter;" vertex="1" parent="1">
+          <mxGeometry x="260" y="437.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="paramobrig_q" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Choice state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Parâmetros obrigatórios foram informados?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="520" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="paramobrig_q_icon" value="" style="html=1;fillColor=#9b7fe8;strokeColor=none;shape=mxgraph.basic.diamondThin;perimeter=rhombusPerimeter;" vertex="1" parent="1">
+          <mxGeometry x="200" y="542.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="choice_owner" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Choice state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Choice (owner válido?)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="630" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="choice_owner_icon" value="" style="html=1;fillColor=#9b7fe8;strokeColor=none;shape=mxgraph.basic.diamondThin;perimeter=rhombusPerimeter;" vertex="1" parent="1">
+          <mxGeometry x="200" y="647.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="consultaparam" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Lambda: Invoke&lt;/font&gt;&lt;br&gt;&lt;b&gt;Consultar Parâmetros da Categoria&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="720" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="consultaparam_icon" value="" style="html=1;fillColor=#f2994a;strokeColor=none;rounded=1;arcSize=25;" vertex="1" parent="1">
+          <mxGeometry x="200" y="737.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="categoria_q" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Choice state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Categoria existe?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="810" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="categoria_q_icon" value="" style="html=1;fillColor=#9b7fe8;strokeColor=none;shape=mxgraph.basic.diamondThin;perimeter=rhombusPerimeter;" vertex="1" parent="1">
+          <mxGeometry x="200" y="827.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="steponico_q" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Choice state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Step único?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="900" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="steponico_q_icon" value="" style="html=1;fillColor=#9b7fe8;strokeColor=none;shape=mxgraph.basic.diamondThin;perimeter=rhombusPerimeter;" vertex="1" parent="1">
+          <mxGeometry x="200" y="922.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="desativar" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Pass state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Não - Desativar MaximizeResourceAllocation&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1010" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="desativar_icon" value="" style="html=1;fillColor=#4a90e2;strokeColor=none;rounded=1;arcSize=100;" vertex="1" parent="1">
+          <mxGeometry x="110" y="1027.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="ativar" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Pass state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Sim - Ativar MaximizeResourceAllocation&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="400" y="1010" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ativar_icon" value="" style="html=1;fillColor=#4a90e2;strokeColor=none;rounded=1;arcSize=100;" vertex="1" parent="1">
+          <mxGeometry x="410" y="1027.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="nao" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Pass state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Não (usa cluster_id existente)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="700" y="420" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="nao_icon" value="" style="html=1;fillColor=#4a90e2;strokeColor=none;rounded=1;arcSize=100;" vertex="1" parent="1">
+          <mxGeometry x="710" y="437.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="criarcluster" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;EMR: CreateCluster&lt;/font&gt;&lt;br&gt;&lt;b&gt;Criar Cluster&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="250" y="1100" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="criarcluster_icon" value="" style="html=1;fillColor=#8c6fe0;strokeColor=none;rounded=1;arcSize=25;" vertex="1" parent="1">
+          <mxGeometry x="260" y="1117.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="steps" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Map state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Steps&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="250" y="1190" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="steps_icon" value="" style="html=1;fillColor=#9b7fe8;strokeColor=none;rounded=1;arcSize=25;" vertex="1" parent="1">
+          <mxGeometry x="260" y="1207.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="end_ok" value="End" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f2d98a;strokeColor=none;fontColor=#12151c;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="2280" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="throttling_q" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Choice state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Seria erro de Throttling, falta de IPs ou de Spots na criação do Cluster?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1100" width="300" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="throttling_q_icon" value="" style="html=1;fillColor=#9b7fe8;strokeColor=none;shape=mxgraph.basic.diamondThin;perimeter=rhombusPerimeter;" vertex="1" parent="1">
+          <mxGeometry x="650" y="1132.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="esperar" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Wait state&lt;/font&gt;&lt;br&gt;&lt;b&gt;(Sim) Esperar&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="640" y="1230" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="esperar_icon" value="" style="html=1;fillColor=#4fc3c0;strokeColor=none;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="650" y="1247.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="alertar" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;SNS: Publish&lt;/font&gt;&lt;br&gt;&lt;b&gt;(Não) Alertar Erro na Criação do Cluster&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1100" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="alertar_icon" value="" style="html=1;fillColor=#e0507a;strokeColor=none;rounded=1;arcSize=25;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="1117.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="falhacriacao" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Fail state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Falha na criação do Cluster&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1190" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="falhacriacao_icon" value="" style="html=1;fillColor=#e05c5c;strokeColor=none;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="1207.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="aguardaremr" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Wait state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Aguardar EMR definir o status real do Cluster&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1300" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="aguardaremr_icon" value="" style="html=1;fillColor=#4fc3c0;strokeColor=none;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1317.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="verificarmotivo" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;EMR: DescribeCluster&lt;/font&gt;&lt;br&gt;&lt;b&gt;Verificar motivo da falha no Cluster&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1390" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="verificarmotivo_icon" value="" style="html=1;fillColor=#8c6fe0;strokeColor=none;rounded=1;arcSize=25;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1407.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="falhouspot_q" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Choice state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Falhou por interrupção de instância Spot ou falta de IPs?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1480" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="falhouspot_q_icon" value="" style="html=1;fillColor=#9b7fe8;strokeColor=none;shape=mxgraph.basic.diamondThin;perimeter=rhombusPerimeter;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1507.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="clusteridcriado_q" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Choice state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Cluster ID criado nesta Step?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1590" width="260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="clusteridcriado_q_icon" value="" style="html=1;fillColor=#9b7fe8;strokeColor=none;shape=mxgraph.basic.diamondThin;perimeter=rhombusPerimeter;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1607.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="falha_final" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Fail state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Falha&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="450" y="1490" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="falha_final_icon" value="" style="html=1;fillColor=#e05c5c;strokeColor=none;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1507.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="categoria_fail" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Fail state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Categoria inexistente&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1700" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="categoria_fail_icon" value="" style="html=1;fillColor=#e05c5c;strokeColor=none;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1717.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="owner_fail" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Fail state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Owner não informado&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="1750" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="owner_fail_icon" value="" style="html=1;fillColor=#e05c5c;strokeColor=none;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="1767.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="paramobrig_fail" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Fail state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Parâmetros obrigatórios não informados&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="1600" y="1750" width="240" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="paramobrig_fail_icon" value="" style="html=1;fillColor=#e05c5c;strokeColor=none;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="1610" y="1767.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="map_group" value="Map state · Steps · ItemProcessor (INLINE)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#171a22;strokeColor=#333a48;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontColor=#8b93a3;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="850" y="1310" width="560" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="addargs_q" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Choice state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Adiciona os Arguments Default?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="980" y="1360" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="addargs_q_icon" value="" style="html=1;fillColor=#9b7fe8;strokeColor=none;shape=mxgraph.basic.diamondThin;perimeter=rhombusPerimeter;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1382.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="prepsem" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Pass state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Preparo SEM Arguments Default&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="880" y="1460" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="prepsem_icon" value="" style="html=1;fillColor=#4a90e2;strokeColor=none;rounded=1;arcSize=100;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1477.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="prepcom" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Pass state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Preparo COM Arguments Default&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="1460" width="250" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="prepcom_icon" value="" style="html=1;fillColor=#4a90e2;strokeColor=none;rounded=1;arcSize=100;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="1477.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="addstep" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;EMR: AddStep&lt;/font&gt;&lt;br&gt;&lt;b&gt;Adicionar Step ao Cluster EMR&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="980" y="1550" width="280" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="addstep_icon" value="" style="html=1;fillColor=#8c6fe0;strokeColor=none;rounded=1;arcSize=25;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1567.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="erroapi_q" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Choice state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Erro de API Throttling da AWS?&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="980" y="1640" width="280" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="erroapi_q_icon" value="" style="html=1;fillColor=#9b7fe8;strokeColor=none;shape=mxgraph.basic.diamondThin;perimeter=rhombusPerimeter;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1662.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="aguardarstep" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Wait state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Aguardar&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="880" y="1740" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="aguardarstep_icon" value="" style="html=1;fillColor=#4fc3c0;strokeColor=none;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1757.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="falhastep" value="&lt;font color=&quot;#8b93a3&quot; style=&quot;font-size:9px;&quot;&gt;Fail state&lt;/font&gt;&lt;br&gt;&lt;b&gt;Falha no Step&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fillColor=#1c2029;strokeColor=#333a48;strokeWidth=1;fontColor=#e8e9ec;align=left;verticalAlign=middle;spacingLeft=34;fontSize=11;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="1740" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="falhastep_icon" value="" style="html=1;fillColor=#e05c5c;strokeColor=none;ellipse;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="1757.0" width="16" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="map_end" value="End" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f2d98a;strokeColor=none;fontColor=#12151c;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="1830" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="start" target="modelo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="modelo" target="paramdefault">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="paramdefault" target="unir">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="unir" target="consultasteps">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="consultasteps" target="criarcluster_q">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="$.InputParams.cluster_id é nulo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="criarcluster_q" target="paramobrig_q">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="default" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="criarcluster_q" target="nao">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="projeto, etapa e owner presentes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="paramobrig_q" target="choice_owner">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="default" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="paramobrig_q" target="paramobrig_fail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="owner válido" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="choice_owner" target="consultaparam">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="default" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="choice_owner" target="owner_fail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="consultaparam" target="categoria_q">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="statusCode == 404" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="categoria_q" target="categoria_fail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="default" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="categoria_q" target="steponico_q">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="jobs_paralelas&gt;1 e steps&gt;1 ou ==0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="steponico_q" target="desativar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" value="default" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="steponico_q" target="ativar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="desativar" target="criarcluster">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="ativar" target="criarcluster">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="nao" target="steps">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="criarcluster" target="steps">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" value="Catch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#e0507a;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="criarcluster" target="throttling_q">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e22" value="throttling/spot/IP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="throttling_q" target="esperar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e23" value="default" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="throttling_q" target="alertar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="esperar" target="criarcluster">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e25" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="alertar" target="falhacriacao">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e26" value="sucesso" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="steps" target="end_ok">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e27" value="Catch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#e0507a;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="steps" target="aguardaremr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e28" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="aguardaremr" target="verificarmotivo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e29" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="verificarmotivo" target="falhouspot_q">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e30" value="spot/IP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="falhouspot_q" target="clusteridcriado_q">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e31" value="default" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="falhouspot_q" target="falha_final">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e32" value="cluster_id nulo" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="clusteridcriado_q" target="criarcluster">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e33" value="default" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="clusteridcriado_q" target="steps">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e34" value="true" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="addargs_q" target="prepsem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e35" value="default" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="addargs_q" target="prepcom">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e36" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="prepsem" target="addstep">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="prepcom" target="addstep">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e38" value="sucesso" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="addstep" target="map_end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e39" value="Catch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#e0507a;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="addstep" target="erroapi_q">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e40" value="ThrottlingException" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="erroapi_q" target="aguardarstep">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e41" value="default" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="erroapi_q" target="falhastep">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e42" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=9;strokeColor=#5b6472;fontColor=#8b93a3;labelBackgroundColor=#12151c;jettySize=auto;curved=0;endArrow=blockThin;endFill=1;strokeWidth=1.2;" edge="1" parent="1" source="aguardarstep" target="addstep">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
