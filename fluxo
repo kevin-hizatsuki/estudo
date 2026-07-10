@@ -1,0 +1,616 @@
+{
+  "StartAt": "Modelo de Input da Step Functions (exemplificativo, sem efeito)",
+  "States": {
+    "(Não) Alertar Erro na Criação do Cluster": {
+      "Next": "Falha na criação do Cluster",
+      "Parameters": {
+        "Message.$": "$",
+        "TopicArn": "arn:aws:sns:us-east-1:123456789012:equipe_engenharia_dados"
+      },
+      "Resource": "arn:aws:states:::sns:publish",
+      "Retry": [
+        {
+          "BackoffRate": 1,
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3
+        }
+      ],
+      "Type": "Task"
+    },
+    "(Sim) Esperar": {
+      "Next": "Criar Cluster",
+      "Seconds": 30,
+      "Type": "Wait"
+    },
+    "Aguardar EMR definir o status real do Cluster": {
+      "Next": "Verificar motivo da falha no Cluster",
+      "Seconds": 240,
+      "Type": "Wait"
+    },
+    "Categoria existe?": {
+      "Choices": [
+        {
+          "Next": "Categoria inexistente",
+          "NumericEquals": 404,
+          "Variable": "$.LambdaParametros.statusCode"
+        }
+      ],
+      "Default": "Step único?",
+      "Type": "Choice"
+    },
+    "Categoria inexistente": {
+      "CausePath": "$.LambdaParametros.details",
+      "Error": "ParametroInvalido",
+      "Type": "Fail"
+    },
+    "Choice": {
+      "Choices": [
+        {
+          "Next": "Consultar Parâmetros da Categoria",
+          "Or": [
+            {
+              "StringMatches": "EngenhariaDados",
+              "Variable": "$.InputParams.owner"
+            },
+            {
+              "StringMatches": "CienciaDados",
+              "Variable": "$.InputParams.owner"
+            },
+            {
+              "StringMatches": "Risco",
+              "Variable": "$.InputParams.owner"
+            },
+            {
+              "StringMatches": "DW",
+              "Variable": "$.InputParams.owner"
+            }
+          ]
+        }
+      ],
+      "Default": "Owner não informado",
+      "Type": "Choice"
+    },
+    "Cluster ID criado nesta Step?": {
+      "Choices": [
+        {
+          "IsNull": true,
+          "Next": "Criar Cluster",
+          "Variable": "$.InputParams.cluster_id"
+        }
+      ],
+      "Default": "Steps",
+      "Type": "Choice"
+    },
+    "Consulta número de Steps": {
+      "Next": "Criar Cluster?",
+      "Parameters": {
+        "StepsLength.$": "States.ArrayLength($.InputParams.steps)"
+      },
+      "ResultPath": "$.InputMetadata",
+      "Type": "Pass"
+    },
+    "Consultar Parâmetros da Categoria": {
+      "Next": "Categoria existe?",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:us-east-1:123456789012:function:ConsultaParametrosCategoriaEMR",
+        "Payload": {
+          "categoria.$": "$.InputParams.categoria",
+          "dynamodb_table": "EMRCategorias"
+        }
+      },
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "ResultPath": "$.LambdaParametros",
+      "ResultSelector": {
+        "details.$": "$.Payload.details",
+        "statusCode.$": "$.Payload.statusCode"
+      },
+      "Retry": [
+        {
+          "BackoffRate": 1.2,
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "IntervalSeconds": 3,
+          "JitterStrategy": "FULL",
+          "MaxAttempts": 3
+        }
+      ],
+      "Type": "Task"
+    },
+    "Criar Cluster": {
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Next": "Seria erro de Throttling, falta de IPs ou de Spots na criação do Cluster?",
+          "ResultPath": "$.Erro"
+        }
+      ],
+      "Next": "Steps",
+      "Parameters": {
+        "Applications": [
+          {
+            "Name": "Spark"
+          },
+          {
+            "Name": "Hadoop"
+          }
+        ],
+        "AutoTerminationPolicy": {
+          "IdleTimeout": 240
+        },
+        "BootstrapActions": [
+          {
+            "Name": "bootstrap-script",
+            "ScriptBootstrapAction": {
+              "Path.$": "$.InputParams.s3_bashscript_dependencias"
+            }
+          }
+        ],
+        "Configurations": [
+          {
+            "Classification": "yarn-site",
+            "Properties": {
+              "yarn.node-labels.am.default-node-label-expression": "CORE",
+              "yarn.node-labels.enabled": "true",
+              "yarn.nodemanager.pmem-check-enabled": "false",
+              "yarn.nodemanager.vmem-check-enabled": "false",
+              "yarn.resourcemanager.am.max-attempts": "1"
+            }
+          },
+          {
+            "Classification": "spark-hive-site",
+            "Properties": {
+              "hive.metastore.client.factory.class": "com.amazonaws.glue.catalog.metastore.AWSGlueDataCatalogHiveClientFactory"
+            }
+          },
+          {
+            "Classification": "emrfs-site",
+            "Properties": {
+              "fs.s3.aimd.enabled": "true",
+              "fs.s3.aimd.maxAttempts": "10000",
+              "fs.s3.connection.maximum": "6000",
+              "fs.s3.maxConnections": "6000",
+              "fs.s3.maxRetries": "10000",
+              "fs.s3.threads.max": "5000",
+              "fs.s3a.connection.maximum": "6000",
+              "fs.s3a.maxConnections": "6000",
+              "fs.s3a.threads.max": "5000"
+            }
+          },
+          {
+            "Classification": "spark",
+            "Properties": {
+              "maximizeResourceAllocation.$": "$.InputMetadata.MaximizeResourceAllocation"
+            }
+          }
+        ],
+        "Instances": {
+          "AdditionalMasterSecurityGroups.$": "$.InputParams.securitygroups_ids",
+          "AdditionalSlaveSecurityGroups.$": "$.InputParams.securitygroups_ids",
+          "Ec2SubnetId.$": "$.InputParams.subnet_id",
+          "InstanceFleets.$": "$.LambdaParametros.details.InstanceFleets",
+          "KeepJobFlowAliveWhenNoSteps": true
+        },
+        "JobFlowRole": "ecsInstanceRole",
+        "LogUri.$": "$.InputParams.s3_logs",
+        "ManagedScalingPolicy.$": "$.LambdaParametros.details.ManagedScalingPolicy",
+        "Name.$": "States.Format('{}__{}', $.InputParams.projeto, $.InputParams.etapa)",
+        "ReleaseLabel.$": "States.Format('emr-{}', $.InputParams.emr_version)",
+        "ServiceRole": "EMR_DefaultRole",
+        "StepConcurrencyLevel.$": "$.InputParams.jobs_paralelas",
+        "Tags": [
+          {
+            "Key": "Owner",
+            "Value.$": "$.InputParams.owner"
+          },
+          {
+            "Key": "Projeto",
+            "Value.$": "$.InputParams.projeto"
+          },
+          {
+            "Key": "Name",
+            "Value.$": "States.Format('{}__{}', $.InputParams.projeto, $.InputParams.etapa)"
+          },
+          {
+            "Key": "Terraform",
+            "Value": "true"
+          },
+          {
+            "Key": "for-use-with-amazon-emr-managed-policies",
+            "Value": "true"
+          }
+        ],
+        "VisibleToAllUsers": true
+      },
+      "Resource": "arn:aws:states:::elasticmapreduce:createCluster.sync",
+      "ResultPath": "$.Cluster",
+      "ResultSelector": {
+        "cluster_id.$": "$.ClusterId"
+      },
+      "Retry": [
+        {
+          "BackoffRate": 1,
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 2
+        }
+      ],
+      "Type": "Task"
+    },
+    "Criar Cluster?": {
+      "Choices": [
+        {
+          "IsNull": true,
+          "Next": "Parâmetros obrigatórios foram informados?",
+          "Variable": "$.InputParams.cluster_id"
+        }
+      ],
+      "Default": "Não",
+      "Type": "Choice"
+    },
+    "Falha": {
+      "CausePath": "$.StepsError.Cause",
+      "ErrorPath": "$.StepsError.Error",
+      "Type": "Fail"
+    },
+    "Falha na criação do Cluster": {
+      "CausePath": "$.Erro.Cause",
+      "ErrorPath": "$.Erro.Error",
+      "Type": "Fail"
+    },
+    "Falhou por interrupção de instância Spot ou falta de IPs?": {
+      "Choices": [
+        {
+          "Next": "Cluster ID criado nesta Step?",
+          "Or": [
+            {
+              "StringMatches": "*terminated due to Spot*",
+              "Variable": "$.DescribeFailedCluster.Message"
+            },
+            {
+              "StringMatches": "*Master node was terminated*",
+              "Variable": "$.DescribeFailedCluster.Message"
+            },
+            {
+              "StringMatches": "*terminated by Spot*",
+              "Variable": "$.DescribeFailedCluster.Message"
+            },
+            {
+              "StringMatches": "*subnet is not large enough*",
+              "Variable": "$.DescribeFailedCluster.Message"
+            },
+            {
+              "StringMatches": "*Not enough free addresses in subnet*",
+              "Variable": "$.DescribeFailedCluster.Message"
+            },
+            {
+              "StringMatches": "*does not have any free IP addresses*",
+              "Variable": "$.DescribeFailedCluster.Message"
+            }
+          ]
+        }
+      ],
+      "Default": "Falha",
+      "Type": "Choice"
+    },
+    "Modelo de Input da Step Functions (exemplificativo, sem efeito)": {
+      "Comment": "O modelo de Input para iniciar esta Step Functions encontra-se na aba \"Output\" deste state.",
+      "Next": "Parâmetros Default",
+      "Result": {
+        "categoria": "leve|medio|pesado|unico_grande|teste (Default: leve)",
+        "cluster_id": "Informa apenas o cluster já foi criado antes",
+        "emr_version": "6.5.0",
+        "etapa": "Nome da etapa (Exemplo: ETL)",
+        "jobs_paralelas": 5,
+        "owner": "Owner do projeto para mapear custos (Opções: EngenhariaDados, CienciaDados, Risco, DW)",
+        "projeto": "Nome do projeto (Exemplo: ProjetoExemplo_PROD)",
+        "s3_bashscript_dependencias": "s3://meu-bucket-datalake-exemplo/emr/bootstrap_emr.sh (Crie um específico para seu Projeto caso precise de mais Python Packages além do 'boto3')",
+        "s3_logs": "s3://meu-bucket-datalake-exemplo/emr/logs/",
+        "securitygroups_ids": [
+          "opcional"
+        ],
+        "step_overwrite_all_args": false,
+        "steps": [
+          {
+            "args": "s3://meu-bucket-datalake-exemplo/tests/EMR/script_delta.py;--TABLE_NAME=teste",
+            "name": "Identificador do Step (Geralmente é a tabela, exemplo: senna)",
+            "timeout_seconds": 3600
+          },
+          {
+            "args": "s3://caminho/para/script.py;--TABLE_NAME=teste;--PARAM2=VALOR2",
+            "name": "Identificador de outro Step",
+            "timeout_seconds": 3600
+          }
+        ],
+        "subnet_id": "opcional"
+      },
+      "ResultPath": null,
+      "Type": "Pass"
+    },
+    "Não": {
+      "Next": "Steps",
+      "Parameters": {
+        "cluster_id.$": "$.InputParams.cluster_id"
+      },
+      "ResultPath": "$.Cluster",
+      "Type": "Pass"
+    },
+    "Não - Desativar MaximizeResourceAllocation": {
+      "Next": "Criar Cluster",
+      "Result": {
+        "MaximizeResourceAllocation": "false"
+      },
+      "ResultPath": "$.InputMetadata",
+      "Type": "Pass"
+    },
+    "Owner não informado": {
+      "Cause": "O campo 'owner' deve estar entre as opções: [EngenhariaDados, CienciaDados, Risco, DW]",
+      "Error": "ParametroInvalido",
+      "Type": "Fail"
+    },
+    "Parâmetros Default": {
+      "Next": "Unir Parâmetros do Input e Parâmetros Default",
+      "Result": {
+        "categoria": "leve",
+        "cluster_id": null,
+        "emr_version": "6.5.0",
+        "jobs_paralelas": 5,
+        "s3_bashscript_dependencias": "s3://meu-bucket-datalake-exemplo/emr/bootstrap_emr.sh",
+        "s3_logs": "s3://meu-bucket-datalake-exemplo/emr/logs/",
+        "securitygroups_ids": [
+          "sg-xxxxxxxxxxxxxxxxx",
+          "sg-yyyyyyyyyyyyyyyyy"
+        ],
+        "step_overwrite_all_args": false,
+        "steps": [],
+        "subnet_id": "subnet-xxxxxxxxxxxxxxxxx"
+      },
+      "ResultPath": "$.default_params",
+      "Type": "Pass"
+    },
+    "Parâmetros obrigatórios foram informados?": {
+      "Choices": [
+        {
+          "And": [
+            {
+              "IsPresent": true,
+              "Variable": "$.InputParams.projeto"
+            },
+            {
+              "IsPresent": true,
+              "Variable": "$.InputParams.etapa"
+            },
+            {
+              "IsPresent": true,
+              "Variable": "$.InputParams.owner"
+            }
+          ],
+          "Next": "Choice"
+        }
+      ],
+      "Default": "Parâmetros obrigatórios não informados",
+      "Type": "Choice"
+    },
+    "Parâmetros obrigatórios não informados": {
+      "Cause": "Informe os campos 'owner', 'projeto' e 'etapa'.",
+      "Error": "ParametroInvalido",
+      "Type": "Fail"
+    },
+    "Seria erro de Throttling, falta de IPs ou de Spots na criação do Cluster?": {
+      "Choices": [
+        {
+          "Next": "(Sim) Esperar",
+          "Or": [
+            {
+              "StringMatches": "*ThrottlingException*",
+              "Variable": "$.Erro.Cause"
+            },
+            {
+              "StringMatches": "*terminated due to Spot*",
+              "Variable": "$.Erro.Cause"
+            },
+            {
+              "StringMatches": "*terminated by Spot*",
+              "Variable": "$.Erro.Cause"
+            },
+            {
+              "StringMatches": "*subnet is not large enough*",
+              "Variable": "$.Erro.Cause"
+            },
+            {
+              "StringMatches": "*Not enough free addresses in subnet*",
+              "Variable": "$.Erro.Cause"
+            },
+            {
+              "StringMatches": "*does not have any free IP addresses*",
+              "Variable": "$.Erro.Cause"
+            }
+          ]
+        }
+      ],
+      "Default": "(Não) Alertar Erro na Criação do Cluster",
+      "Type": "Choice"
+    },
+    "Sim - Ativar MaximizeResourceAllocation": {
+      "Next": "Criar Cluster",
+      "Parameters": {
+        "MaximizeResourceAllocation": "true"
+      },
+      "ResultPath": "$.InputMetadata",
+      "Type": "Pass"
+    },
+    "Step único?": {
+      "Choices": [
+        {
+          "And": [
+            {
+              "NumericGreaterThan": 1,
+              "Variable": "$.InputParams.jobs_paralelas"
+            },
+            {
+              "Or": [
+                {
+                  "NumericGreaterThan": 1,
+                  "Variable": "$.InputMetadata.StepsLength"
+                },
+                {
+                  "NumericEquals": 0,
+                  "Variable": "$.InputMetadata.StepsLength"
+                }
+              ]
+            }
+          ],
+          "Next": "Não - Desativar MaximizeResourceAllocation"
+        }
+      ],
+      "Default": "Sim - Ativar MaximizeResourceAllocation",
+      "Type": "Choice"
+    },
+    "Steps": {
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Next": "Aguardar EMR definir o status real do Cluster",
+          "ResultPath": "$.StepsError"
+        }
+      ],
+      "End": true,
+      "ItemProcessor": {
+        "ProcessorConfig": {
+          "Mode": "INLINE"
+        },
+        "StartAt": "Adiciona os Arguments Default?",
+        "States": {
+          "Adiciona os Arguments Default?": {
+            "Choices": [
+              {
+                "BooleanEquals": true,
+                "Next": "Preparo SEM Arguments Default",
+                "Variable": "$.StepOverwriteAllArgs"
+              }
+            ],
+            "Default": "Preparo COM Arguments Default",
+            "Type": "Choice"
+          },
+          "Adicionar Step ao Cluster EMR": {
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.TaskFailed"
+                ],
+                "Next": "Erro de API Throttling da AWS?",
+                "ResultPath": "$.Erro"
+              }
+            ],
+            "End": true,
+            "Parameters": {
+              "ClusterId.$": "$.ClusterId",
+              "Step": {
+                "ActionOnFailure": "CONTINUE",
+                "HadoopJarStep": {
+                  "Args.$": "$.Step.Args",
+                  "Jar": "command-runner.jar"
+                },
+                "Name.$": "$.StepName"
+              }
+            },
+            "Resource": "arn:aws:states:::elasticmapreduce:addStep.sync",
+            "TimeoutSecondsPath": "$.StepTimeoutSeconds",
+            "Type": "Task"
+          },
+          "Aguardar": {
+            "Next": "Adicionar Step ao Cluster EMR",
+            "Seconds": 5,
+            "Type": "Wait"
+          },
+          "Erro de API Throttling da AWS?": {
+            "Choices": [
+              {
+                "Next": "Aguardar",
+                "StringMatches": "*ThrottlingException*",
+                "Variable": "$.Erro.Cause"
+              }
+            ],
+            "Default": "Falha no Step",
+            "Type": "Choice"
+          },
+          "Falha no Step": {
+            "CausePath": "$.Erro.Cause",
+            "ErrorPath": "$.Erro.Error",
+            "Type": "Fail"
+          },
+          "Preparo COM Arguments Default": {
+            "Next": "Adicionar Step ao Cluster EMR",
+            "Parameters": {
+              "Args.$": "States.StringSplit(States.Format('{};{}', $.StepDefaultArgs, $.StepArgs), ';')"
+            },
+            "ResultPath": "$.Step",
+            "Type": "Pass"
+          },
+          "Preparo SEM Arguments Default": {
+            "Next": "Adicionar Step ao Cluster EMR",
+            "Parameters": {
+              "Args.$": "States.StringSplit($.StepArgs, ';')"
+            },
+            "ResultPath": "$.Step",
+            "Type": "Pass"
+          }
+        }
+      },
+      "ItemSelector": {
+        "ClusterId.$": "$.Cluster.cluster_id",
+        "StepArgs.$": "$$.Map.Item.Value.args",
+        "StepDefaultArgs": "spark-submit;--deploy-mode=cluster;--master=yarn;--jars=s3://meu-bucket-datalake-exemplo/tests/EMR/delta-core_2.12-1.0.0.jar,s3://meu-bucket-datalake-exemplo/tests/EMR/sqljdbc42.jar;--py-files=s3://meu-bucket-datalake-exemplo/tests/EMR/delta-core_2.12-1.0.0.jar;",
+        "StepName.$": "$$.Map.Item.Value.name",
+        "StepOverwriteAllArgs.$": "$.InputParams.step_overwrite_all_args",
+        "StepTimeoutSeconds.$": "States.StringToJson(States.Format('{}', $$.Map.Item.Value.timeout_seconds))"
+      },
+      "ItemsPath": "$.InputParams.steps",
+      "MaxConcurrency": 500,
+      "OutputPath": "$.Cluster",
+      "ResultPath": null,
+      "Type": "Map"
+    },
+    "Unir Parâmetros do Input e Parâmetros Default": {
+      "Next": "Consulta número de Steps",
+      "Parameters": {
+        "InputParams.$": "States.JsonMerge($.default_params, $$.Execution.Input, false)"
+      },
+      "Type": "Pass"
+    },
+    "Verificar motivo da falha no Cluster": {
+      "Next": "Falhou por interrupção de instância Spot ou falta de IPs?",
+      "Parameters": {
+        "ClusterId.$": "$.Cluster.cluster_id"
+      },
+      "Resource": "arn:aws:states:::aws-sdk:emr:describeCluster",
+      "ResultPath": "$.DescribeFailedCluster",
+      "ResultSelector": {
+        "Message.$": "$.Cluster.Status.StateChangeReason.Message"
+      },
+      "Retry": [
+        {
+          "BackoffRate": 1,
+          "Comment": "Necessária verificação do motivo em razão de que a falha no Step ocorrida por interrupção em instância Spot também pode apresentar o mesmo title de erro no script (Unknow error), sendo identificado apenas no status do Cluster.",
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "IntervalSeconds": 10,
+          "JitterStrategy": "FULL",
+          "MaxAttempts": 10,
+          "MaxDelaySeconds": 40
+        }
+      ],
+      "Type": "Task"
+    }
+  }
+}
