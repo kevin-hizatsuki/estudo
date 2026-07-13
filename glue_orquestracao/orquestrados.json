@@ -1,0 +1,156 @@
+{
+  "Comment": "EngDadosTF_datalake_anonymization_full",
+  "StartAt": "Listar Tabelas",
+  "States": {
+    "Listar Tabelas": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "Payload": {
+          "type": "full",
+          "dynamotable": "NOME_DA_TABELA_DYNAMODB",
+          "JobNameGlue": "NOME_DO_JOB_GLUE_ANONYMIZATION"
+        },
+        "FunctionName": "arn:aws:lambda:us-east-1:123456789012:function:lambda_listar_tabela"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Loop nas Tabelas",
+      "ResultPath": "$.dynamo"
+    },
+    "Loop nas Tabelas": {
+      "Type": "Map",
+      "Iterator": {
+        "StartAt": "Espera tempo específico para evitar sobrecarga",
+        "States": {
+          "Espera tempo específico para evitar sobrecarga": {
+            "Type": "Wait",
+            "Next": "Executar com Glue Python Shell 0,0625 DPU?",
+            "SecondsPath": "$.sleep"
+          },
+          "Executar com Glue Python Shell 0,0625 DPU?": {
+            "Type": "Choice",
+            "Choices": [
+              {
+                "Variable": "$.processing_engine",
+                "StringEquals": "glue_pythonshell_0,0625dpu",
+                "Next": "Anonymization Full - Python Shell 0,0625 DPU"
+              }
+            ],
+            "Default": "Executar com Glue Python Shell 1 DPU?"
+          },
+          "Executar com Glue Python Shell 1 DPU?": {
+            "Type": "Choice",
+            "Choices": [
+              {
+                "Variable": "$.processing_engine",
+                "StringEquals": "glue_pythonshell_1dpu",
+                "Next": "Anonymization Full - Python Shell 1 DPU"
+              }
+            ],
+            "Default": "Anonymization Full - Spark Individual DPU"
+          },
+          "Anonymization Full - Python Shell 0,0625 DPU": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "Parameters": {
+              "JobName": "NOME_DO_JOB_ANONYMIZATION_DUCKDB",
+              "Timeout.$": "$.Timeout",
+              "MaxCapacity": 0.0625,
+              "Arguments": {
+                "--TABLE_NAME.$": "$.table_name"
+              }
+            },
+            "Next": "Fim",
+            "ResultPath": null,
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "Anonymization Full - Python Shell 1 DPU",
+                "ResultPath": "$.error"
+              }
+            ]
+          },
+          "Anonymization Full - Python Shell 1 DPU": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "Parameters": {
+              "JobName": "NOME_DO_JOB_ANONYMIZATION_DUCKDB",
+              "Timeout.$": "$.Timeout",
+              "MaxCapacity": 1,
+              "Arguments": {
+                "--TABLE_NAME.$": "$.table_name"
+              }
+            },
+            "Next": "Fim",
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "Anonymization Full - Spark Individual DPU",
+                "ResultPath": "$.error"
+              }
+            ],
+            "ResultPath": null
+          },
+          "Anonymization Full - Spark Individual DPU": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "Parameters": {
+              "JobName": "NOME_DO_JOB_GLUE_ANONYMIZATION",
+              "NumberOfWorkers.$": "$.NumberOfWorkers",
+              "Timeout.$": "$.Timeout",
+              "WorkerType.$": "$.WorkerType",
+              "Arguments": {
+                "--TABLE_NAME.$": "$.table_name",
+                "--ARN_SECRETS_MANAGER.$": "$.servidor_secret_name",
+                "--TASK_TOKEN.$": "$$.Task.Token",
+                "--enable-continuous-cloudwatch-log.$": "$.EnableContinuousLog",
+                "--enable-continuous-log-filter.$": "$.EnableContinuousLogFilter",
+                "--enable-metrics.$": "$.EnableMetrics"
+              }
+            },
+            "Next": "Fim",
+            "ResultPath": "$.glue",
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "Fim",
+                "ResultPath": "$.error"
+              }
+            ]
+          },
+          "Fim": {
+            "Type": "Wait",
+            "Seconds": 5,
+            "End": true
+          }
+        },
+        "ProcessorConfig": {
+          "Mode": "DISTRIBUTED",
+          "ExecutionType": "STANDARD"
+        }
+      },
+      "MaxConcurrency": 70,
+      "ItemsPath": "$.dynamo.Payload",
+      "ResultPath": null,
+      "End": true,
+      "Label": "LoopnasTabelas"
+    }
+  }
+}
