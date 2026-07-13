@@ -1,0 +1,269 @@
+{
+  "categoria": {
+    "S": "leve"
+  },
+  "params": {
+    "M": {
+      "InstanceFleets": {
+        "L": [
+          {
+            "M": {
+              "InstanceFleetType": {
+                "S": "MASTER"
+              },
+              "InstanceTypeConfigs": {
+                "L": [
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "m4.large"
+                      }
+                    }
+                  }
+                ]
+              },
+              "TargetOnDemandCapacity": {
+                "N": "1"
+              }
+            }
+          },
+          {
+            "M": {
+              "InstanceFleetType": {
+                "S": "CORE"
+              },
+              "InstanceTypeConfigs": {
+                "L": [
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "m4.large"
+                      },
+                      "WeightedCapacity": {
+                        "N": "4"
+                      }
+                    }
+                  }
+                ]
+              },
+              "LaunchSpecifications": {
+                "M": {
+                  "OnDemandSpecification": {
+                    "M": {
+                      "AllocationStrategy": {
+                        "S": "lowest-price"
+                      },
+                      "CapacityReservationOptions": {
+                        "M": {
+                          "CapacityReservationPreference": {
+                            "S": "open"
+                          },
+                          "UsageStrategy": {
+                            "S": "use-capacity-reservations-first"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "SpotSpecification": {
+                    "M": {
+                      "AllocationStrategy": {
+                        "S": "capacity-optimized"
+                      },
+                      "TimeoutAction": {
+                        "S": "SWITCH_TO_ON_DEMAND"
+                      },
+                      "TimeoutDurationMinutes": {
+                        "N": "15"
+                      }
+                    }
+                  }
+                }
+              },
+              "ResizeSpecifications": {
+                "M": {
+                  "OnDemandResizeSpecification": {
+                    "M": {
+                      "TimeoutDurationMinutes": {
+                        "N": "15"
+                      }
+                    }
+                  },
+                  "SpotResizeSpecification": {
+                    "M": {
+                      "TimeoutDurationMinutes": {
+                        "N": "15"
+                      }
+                    }
+                  }
+                }
+              },
+              "TargetOnDemandCapacity": {
+                "N": "4"
+              }
+            }
+          },
+          {
+            "M": {
+              "InstanceFleetType": {
+                "S": "TASK"
+              },
+              "InstanceTypeConfigs": {
+                "L": [
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "r6gd.xlarge"
+                      },
+                      "WeightedCapacity": {
+                        "N": "4"
+                      }
+                    }
+                  },
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "r6g.xlarge"
+                      },
+                      "WeightedCapacity": {
+                        "N": "4"
+                      }
+                    }
+                  },
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "r5.xlarge"
+                      },
+                      "WeightedCapacity": {
+                        "N": "4"
+                      }
+                    }
+                  },
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "m6g.2xlarge"
+                      },
+                      "WeightedCapacity": {
+                        "N": "4"
+                      }
+                    }
+                  },
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "m6gd.2xlarge"
+                      },
+                      "WeightedCapacity": {
+                        "N": "4"
+                      }
+                    }
+                  },
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "m5.2xlarge"
+                      },
+                      "WeightedCapacity": {
+                        "N": "4"
+                      }
+                    }
+                  },
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "r6g.2xlarge"
+                      },
+                      "WeightedCapacity": {
+                        "N": "8"
+                      }
+                    }
+                  }
+                ]
+              },
+              "LaunchSpecifications": {
+                "M": {
+                  "OnDemandSpecification": {
+                    "M": {
+                      "AllocationStrategy": {
+                        "S": "lowest-price"
+                      },
+                      "CapacityReservationOptions": {
+                        "M": {
+                          "CapacityReservationPreference": {
+                            "S": "open"
+                          },
+                          "UsageStrategy": {
+                            "S": "use-capacity-reservations-first"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "SpotSpecification": {
+                    "M": {
+                      "AllocationStrategy": {
+                        "S": "capacity-optimized"
+                      },
+                      "TimeoutAction": {
+                        "S": "SWITCH_TO_ON_DEMAND"
+                      },
+                      "TimeoutDurationMinutes": {
+                        "N": "10"
+                      }
+                    }
+                  }
+                }
+              },
+              "ResizeSpecifications": {
+                "M": {
+                  "OnDemandResizeSpecification": {
+                    "M": {
+                      "TimeoutDurationMinutes": {
+                        "N": "15"
+                      }
+                    }
+                  },
+                  "SpotResizeSpecification": {
+                    "M": {
+                      "TimeoutDurationMinutes": {
+                        "N": "15"
+                      }
+                    }
+                  }
+                }
+              },
+              "TargetSpotCapacity": {
+                "N": "1"
+              }
+            }
+          }
+        ]
+      },
+      "ManagedScalingPolicy": {
+        "M": {
+          "ComputeLimits": {
+            "M": {
+              "MaximumCapacityUnits": {
+                "N": "20"
+              },
+              "MaximumCoreCapacityUnits": {
+                "N": "4"
+              },
+              "MaximumOnDemandCapacityUnits": {
+                "N": "4"
+              },
+              "MinimumCapacityUnits": {
+                "N": "4"
+              },
+              "UnitType": {
+                "S": "InstanceFleetUnits"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
