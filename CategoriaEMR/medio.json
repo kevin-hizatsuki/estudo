@@ -1,0 +1,229 @@
+{
+  "categoria": {
+    "S": "medio"
+  },
+  "params": {
+    "M": {
+      "InstanceFleets": {
+        "L": [
+          {
+            "M": {
+              "InstanceFleetType": {
+                "S": "MASTER"
+              },
+              "InstanceTypeConfigs": {
+                "L": [
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "m4.large"
+                      }
+                    }
+                  }
+                ]
+              },
+              "TargetOnDemandCapacity": {
+                "N": "1"
+              }
+            }
+          },
+          {
+            "M": {
+              "InstanceFleetType": {
+                "S": "CORE"
+              },
+              "InstanceTypeConfigs": {
+                "L": [
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "m4.large"
+                      },
+                      "WeightedCapacity": {
+                        "N": "4"
+                      }
+                    }
+                  }
+                ]
+              },
+              "LaunchSpecifications": {
+                "M": {
+                  "OnDemandSpecification": {
+                    "M": {
+                      "AllocationStrategy": {
+                        "S": "lowest-price"
+                      },
+                      "CapacityReservationOptions": {
+                        "M": {
+                          "CapacityReservationPreference": {
+                            "S": "open"
+                          },
+                          "UsageStrategy": {
+                            "S": "use-capacity-reservations-first"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "SpotSpecification": {
+                    "M": {
+                      "AllocationStrategy": {
+                        "S": "price-capacity-optimized"
+                      },
+                      "TimeoutAction": {
+                        "S": "SWITCH_TO_ON_DEMAND"
+                      },
+                      "TimeoutDurationMinutes": {
+                        "N": "10"
+                      }
+                    }
+                  }
+                }
+              },
+              "ResizeSpecifications": {
+                "M": {
+                  "OnDemandResizeSpecification": {
+                    "M": {
+                      "TimeoutDurationMinutes": {
+                        "N": "10"
+                      }
+                    }
+                  },
+                  "SpotResizeSpecification": {
+                    "M": {
+                      "TimeoutDurationMinutes": {
+                        "N": "10"
+                      }
+                    }
+                  }
+                }
+              },
+              "TargetOnDemandCapacity": {
+                "N": "4"
+              }
+            }
+          },
+          {
+            "M": {
+              "InstanceFleetType": {
+                "S": "TASK"
+              },
+              "InstanceTypeConfigs": {
+                "L": [
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "r6gd.4xlarge"
+                      },
+                      "WeightedCapacity": {
+                        "N": "4"
+                      }
+                    }
+                  },
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "r6g.4xlarge"
+                      },
+                      "WeightedCapacity": {
+                        "N": "4"
+                      }
+                    }
+                  },
+                  {
+                    "M": {
+                      "InstanceType": {
+                        "S": "r4.4xlarge"
+                      },
+                      "WeightedCapacity": {
+                        "N": "4"
+                      }
+                    }
+                  }
+                ]
+              },
+              "LaunchSpecifications": {
+                "M": {
+                  "OnDemandSpecification": {
+                    "M": {
+                      "AllocationStrategy": {
+                        "S": "lowest-price"
+                      },
+                      "CapacityReservationOptions": {
+                        "M": {
+                          "CapacityReservationPreference": {
+                            "S": "open"
+                          },
+                          "UsageStrategy": {
+                            "S": "use-capacity-reservations-first"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "SpotSpecification": {
+                    "M": {
+                      "AllocationStrategy": {
+                        "S": "price-capacity-optimized"
+                      },
+                      "TimeoutAction": {
+                        "S": "SWITCH_TO_ON_DEMAND"
+                      },
+                      "TimeoutDurationMinutes": {
+                        "N": "5"
+                      }
+                    }
+                  }
+                }
+              },
+              "ResizeSpecifications": {
+                "M": {
+                  "OnDemandResizeSpecification": {
+                    "M": {
+                      "TimeoutDurationMinutes": {
+                        "N": "10"
+                      }
+                    }
+                  },
+                  "SpotResizeSpecification": {
+                    "M": {
+                      "TimeoutDurationMinutes": {
+                        "N": "10"
+                      }
+                    }
+                  }
+                }
+              },
+              "TargetSpotCapacity": {
+                "N": "1"
+              }
+            }
+          }
+        ]
+      },
+      "ManagedScalingPolicy": {
+        "M": {
+          "ComputeLimits": {
+            "M": {
+              "MaximumCapacityUnits": {
+                "N": "28"
+              },
+              "MaximumCoreCapacityUnits": {
+                "N": "4"
+              },
+              "MaximumOnDemandCapacityUnits": {
+                "N": "12"
+              },
+              "MinimumCapacityUnits": {
+                "N": "4"
+              },
+              "UnitType": {
+                "S": "InstanceFleetUnits"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
