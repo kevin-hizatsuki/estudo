@@ -1,0 +1,378 @@
+{
+  "Comment": "<<PREFIX>>_orchestrator_incremental - com validações e retry inteligente",
+  "StartAt": "Listagem das tabelas incrementais",
+  "States": {
+    "Listagem das tabelas incrementais": {
+      "Next": "Loop nas tabelas",
+      "Parameters": {
+        "FunctionName": "arn:aws:lambda:<<REGION>>:<<ACCOUNT_ID>>:function:<<PREFIX>>_Listar_tabela",
+        "Payload": {
+          "JobNameGlue": "<<PREFIX>>_Ingestion",
+          "dynamotable": "<<PREFIX>>_Parametros",
+          "type": "incremental"
+        }
+      },
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "ResultPath": "$.Items",
+      "Retry": [
+        {
+          "BackoffRate": 2,
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6
+        }
+      ],
+      "Type": "Task"
+    },
+    "Loop nas tabelas": {
+      "End": true,
+      "ItemProcessor": {
+        "ProcessorConfig": {
+          "ExecutionType": "STANDARD",
+          "Mode": "DISTRIBUTED"
+        },
+        "StartAt": "Inicializa controle de retry",
+        "States": {
+          "Batch SubmitJob Custom": {
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "Batch.InsufficientFreeAddressesInSubnet",
+                  "Batch.InsufficientInstanceCapacity"
+                ],
+                "Next": "Calcula tempo de espera com jitter",
+                "ResultPath": "$.batchErrorInfo"
+              },
+              {
+                "ErrorEquals": [
+                  "Batch.InvalidJobStateException",
+                  "Batch.JobTimeout"
+                ],
+                "Next": "Motor de ingestao EMR (Catch)",
+                "ResultPath": "$.batchErrorInfo"
+              },
+              {
+                "ErrorEquals": [
+                  "States.Timeout"
+                ],
+                "Next": "Motor de ingestao EMR (Catch)",
+                "ResultPath": "$.timeoutInfo"
+              },
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "Motor de ingestao EMR (Catch)",
+                "ResultPath": "$.batchErrorInfo"
+              }
+            ],
+            "HeartbeatSeconds": 1800,
+            "Next": "Fim da Orquestração das Cargas Incrementais",
+            "Parameters": {
+              "ContainerOverrides": {
+                "ResourceRequirements": [
+                  {
+                    "Type": "VCPU",
+                    "Value.$": "States.Format('{}', $.vcpu)"
+                  },
+                  {
+                    "Type": "MEMORY",
+                    "Value.$": "States.Format('{}', $.memory)"
+                  }
+                ]
+              },
+              "JobDefinition": "arn:aws:batch:<<REGION>>:<<ACCOUNT_ID>>:job-definition/<<PREFIX>>_task-lake:<<BATCH_JOBDEF_REVISION>>",
+              "JobName.$": "$.table_name",
+              "JobQueue": "arn:aws:batch:<<REGION>>:<<ACCOUNT_ID>>:job-queue/<<PREFIX>>_fila-batch",
+              "Parameters": {
+                "dynamo_table_param": "<<PREFIX>>_Parametros",
+                "region_param": "<<REGION>>",
+                "secrets_arn_param.$": "$.ARN_SECRETS_MANAGER",
+                "spark-driver-memory.$": "$.spark-driver-memory",
+                "spark-executor-instances.$": "$.spark-executor-instances",
+                "spark-executor-memory-overhead.$": "$.spark-executor-memory-overhead",
+                "spark-executor-memory.$": "$.spark-executor-memory",
+                "table_name_param.$": "$.table_name"
+              },
+              "PropagateTags": true,
+              "Tags": {
+                "Projeto": "<<TAG_PROJETO>>",
+                "etapa.$": "$.table_name"
+              }
+            },
+            "Resource": "arn:aws:states:::batch:submitJob.sync",
+            "ResultPath": null,
+            "Retry": [
+              {
+                "BackoffRate": 2,
+                "ErrorEquals": [
+                  "Batch.InsufficientFreeAddressesInSubnet",
+                  "Batch.InsufficientInstanceCapacity"
+                ],
+                "IntervalSeconds": 300,
+                "MaxAttempts": 3
+              }
+            ],
+            "TimeoutSeconds": 10800,
+            "Type": "Task"
+          },
+          "Calcula tempo de espera com jitter": {
+            "Next": "Espera retry com backoff",
+            "Parameters": {
+              "ARN_SECRETS_MANAGER.$": "$.ARN_SECRETS_MANAGER",
+              "baseWaitTime": 180,
+              "batchErrorInfo.$": "$.batchErrorInfo",
+              "jitterMax": 180,
+              "jitterMin": 60,
+              "retryCount.$": "$.retryCount",
+              "spark-driver-memory.$": "$.spark-driver-memory",
+              "spark-executor-instances.$": "$.spark-executor-instances",
+              "spark-executor-memory-overhead.$": "$.spark-executor-memory-overhead",
+              "spark-executor-memory.$": "$.spark-executor-memory",
+              "table_name.$": "$.table_name"
+            },
+            "Type": "Pass"
+          },
+          "Espera retry com backoff": {
+            "Comment": "Aguarda 5 minutos base + backoff exponencial nos retries",
+            "Next": "Verifica tentativas de retry",
+            "Seconds": 300,
+            "Type": "Wait"
+          },
+          "Espera tempo especifico para evitar sobrecarga": {
+            "Next": "Executar com batch?",
+            "SecondsPath": "$.sleep",
+            "Type": "Wait"
+          },
+          "Executar com EMR?": {
+            "Choices": [
+              {
+                "Next": "Motor de ingestao EMR",
+                "StringEquals": "EMR",
+                "Variable": "$.Categoria_carga"
+              }
+            ],
+            "Default": "Incremental com Spark",
+            "Type": "Choice"
+          },
+          "Executar com batch?": {
+            "Choices": [
+              {
+                "Next": "Valida parametros Batch",
+                "StringEquals": "BATCH",
+                "Variable": "$.Categoria_carga"
+              }
+            ],
+            "Default": "Executar com EMR?",
+            "Type": "Choice"
+          },
+          "Fim da Orquestração das Cargas Incrementais": {
+            "End": true,
+            "Type": "Pass"
+          },
+          "Incrementa contador retry": {
+            "Next": "Batch SubmitJob Custom",
+            "Parameters": {
+              "ARN_SECRETS_MANAGER.$": "$.ARN_SECRETS_MANAGER",
+              "retryCount.$": "States.MathAdd($.retryCount, 1)",
+              "spark-driver-memory.$": "$.spark-driver-memory",
+              "spark-executor-instances.$": "$.spark-executor-instances",
+              "spark-executor-memory-overhead.$": "$.spark-executor-memory-overhead",
+              "spark-executor-memory.$": "$.spark-executor-memory",
+              "table_name.$": "$.table_name"
+            },
+            "Type": "Pass"
+          },
+          "Incremental com Spark": {
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "Fim da Orquestração das Cargas Incrementais"
+              }
+            ],
+            "Next": "Fim da Orquestração das Cargas Incrementais",
+            "Parameters": {
+              "Arguments": {
+                "--ARN_SECRETS_MANAGER.$": "$.ARN_SECRETS_MANAGER",
+                "--TABLE_NAME.$": "$.table_name",
+                "--enable-continuous-cloudwatch-log.$": "$.EnableContinuousLog",
+                "--enable-continuous-log-filter.$": "$.EnableContinuousLogFilter",
+                "--enable-metrics.$": "$.EnableMetrics"
+              },
+              "JobName.$": "$.JobNameGlue",
+              "NumberOfWorkers.$": "$.NumberOfWorkers",
+              "Timeout.$": "$.Timeout",
+              "WorkerType.$": "$.WorkerType"
+            },
+            "Resource": "arn:aws:states:::glue:startJobRun.sync",
+            "ResultPath": null,
+            "Retry": [
+              {
+                "BackoffRate": 2,
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException"
+                ],
+                "IntervalSeconds": 2,
+                "MaxAttempts": 6
+              }
+            ],
+            "Type": "Task"
+          },
+          "Inicializa controle de retry": {
+            "Next": "Espera tempo especifico para evitar sobrecarga",
+            "Parameters": {
+              "ARN_SECRETS_MANAGER.$": "$.ARN_SECRETS_MANAGER",
+              "Categoria_carga.$": "$.Categoria_carga",
+              "EnableContinuousLog.$": "$.EnableContinuousLog",
+              "EnableContinuousLogFilter.$": "$.EnableContinuousLogFilter",
+              "EnableMetrics.$": "$.EnableMetrics",
+              "JobNameGlue.$": "$.JobNameGlue",
+              "NumberOfWorkers.$": "$.NumberOfWorkers",
+              "Timeout.$": "$.Timeout",
+              "WorkerType.$": "$.WorkerType",
+              "categoria.$": "$.categoria",
+              "memory.$": "$.memory",
+              "retryCount": 0,
+              "sleep.$": "$.sleep",
+              "spark-driver-memory.$": "$.spark-driver-memory",
+              "spark-executor-instances.$": "$.spark-executor-instances",
+              "spark-executor-memory-overhead.$": "$.spark-executor-memory-overhead",
+              "spark-executor-memory.$": "$.spark-executor-memory",
+              "table_name.$": "$.table_name",
+              "vcpu.$": "$.vcpu"
+            },
+            "Type": "Pass"
+          },
+          "Limite de retries atingido - Fallback EMR": {
+            "Next": "Motor de ingestao EMR (Catch)",
+            "Result": {
+              "fallback": "Executando via EMR",
+              "reason": "Limite de 2 tentativas de retry atingido para Batch"
+            },
+            "ResultPath": "$.retryExhausted",
+            "Type": "Pass"
+          },
+          "Motor de ingestao EMR": {
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "Fim da Orquestração das Cargas Incrementais",
+                "ResultPath": "$.emrErrorInfo"
+              }
+            ],
+            "Next": "Fim da Orquestração das Cargas Incrementais",
+            "Parameters": {
+              "Input": {
+                "AWS_STEP_FUNCTIONS_STARTED_BY_EXECUTION_ID.$": "$$.Execution.Id",
+                "categoria.$": "$.categoria",
+                "etapa.$": "$.table_name",
+                "owner": "<<TAG_OWNER>>",
+                "projeto": "<<PREFIX>>",
+                "s3_bashscript_dependencias": "s3://<<BUCKET_NAME>>/emr/bootstrap_emr.sh",
+                "step_overwrite_all_args": true,
+                "steps": [
+                  {
+                    "args.$": "States.Format('spark-submit;--deploy-mode=cluster;--master=yarn;--jars=s3://<<BUCKET_NAME>>/emr/jar/delta-core_2.12-1.0.0.jar;--py-files=s3://<<BUCKET_NAME>>/emr/jar/delta-core_2.12-1.0.0.jar,s3://<<BUCKET_NAME>>/scripts/oncardb/engdados_helper.py;s3://<<BUCKET_NAME>>/scripts/oncardb/ingestion.py;--DYNAMODB_TABLE=<<PREFIX>>_Parametros;--ARN_SECRETS_MANAGER={};--TABLE_NAME={};', $.ARN_SECRETS_MANAGER, $.table_name)",
+                    "name.$": "States.Format('{}', $.table_name)",
+                    "timeout_seconds": 7200
+                  }
+                ]
+              },
+              "StateMachineArn": "arn:aws:states:<<REGION>>:<<ACCOUNT_ID>>:stateMachine:<<PREFIX>>_OrquestracaoEMR_v1"
+            },
+            "Resource": "arn:aws:states:::states:startExecution.sync:2",
+            "ResultPath": null,
+            "Type": "Task"
+          },
+          "Motor de ingestao EMR (Catch)": {
+            "Catch": [
+              {
+                "ErrorEquals": [
+                  "States.ALL"
+                ],
+                "Next": "Incremental com Spark",
+                "ResultPath": "$.emrErrorInfo"
+              }
+            ],
+            "Next": "Fim da Orquestração das Cargas Incrementais",
+            "Parameters": {
+              "Input": {
+                "AWS_STEP_FUNCTIONS_STARTED_BY_EXECUTION_ID.$": "$$.Execution.Id",
+                "categoria.$": "$.categoria",
+                "etapa.$": "$.table_name",
+                "owner": "<<TAG_OWNER>>",
+                "projeto": "<<PREFIX>>",
+                "s3_bashscript_dependencias": "s3://<<BUCKET_NAME>>/emr/bootstrap_emr.sh",
+                "step_overwrite_all_args": true,
+                "steps": [
+                  {
+                    "args.$": "States.Format('spark-submit;--deploy-mode=cluster;--master=yarn;--jars=s3://<<BUCKET_NAME>>/emr/jar/delta-core_2.12-1.0.0.jar;--py-files=s3://<<BUCKET_NAME>>/emr/jar/delta-core_2.12-1.0.0.jar,s3://<<BUCKET_NAME>>/scripts/oncardb/engdados_helper.py;s3://<<BUCKET_NAME>>/scripts/oncardb/ingestion.py;--DYNAMODB_TABLE=<<PREFIX>>_Parametros;--ARN_SECRETS_MANAGER={};--TABLE_NAME={};', $.ARN_SECRETS_MANAGER, $.table_name)",
+                    "name.$": "States.Format('{}', $.table_name)",
+                    "timeout_seconds": 7200
+                  }
+                ]
+              },
+              "StateMachineArn": "arn:aws:states:<<REGION>>:<<ACCOUNT_ID>>:stateMachine:<<PREFIX>>_OrquestracaoEMR_v1"
+            },
+            "Resource": "arn:aws:states:::states:startExecution.sync:2",
+            "ResultPath": null,
+            "Type": "Task"
+          },
+          "Parametros invalidos - Fallback EMR": {
+            "Next": "Executar com EMR?",
+            "Result": {
+              "error": "Parametros obrigatórios ausentes para Batch",
+              "fallback": "Redirecionando para EMR"
+            },
+            "ResultPath": "$.validationError",
+            "Type": "Pass"
+          },
+          "Valida parametros Batch": {
+            "Choices": [
+              {
+                "And": [
+                  {
+                    "IsPresent": true,
+                    "Variable": "$.table_name"
+                  },
+                  {
+                    "IsPresent": true,
+                    "Variable": "$.ARN_SECRETS_MANAGER"
+                  }
+                ],
+                "Next": "Batch SubmitJob Custom"
+              }
+            ],
+            "Default": "Parametros invalidos - Fallback EMR",
+            "Type": "Choice"
+          },
+          "Verifica tentativas de retry": {
+            "Choices": [
+              {
+                "Next": "Incrementa contador retry",
+                "NumericLessThan": 2,
+                "Variable": "$.retryCount"
+              }
+            ],
+            "Default": "Limite de retries atingido - Fallback EMR",
+            "Type": "Choice"
+          }
+        }
+      },
+      "ItemsPath": "$.Items.Payload",
+      "MaxConcurrency": 70,
+      "ToleratedFailurePercentage": 100,
+      "Type": "Map"
+    }
+  }
+}
